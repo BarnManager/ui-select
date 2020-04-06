@@ -189,7 +189,9 @@ uis.directive('uiSelect',
             contains = element[0].contains(e.target);
           }
 
-          if (!contains && !$select.clickTriggeredSelect) {
+          // FIXED: always close dropdown on one outside click
+          // if (!contains && !$select.clickTriggeredSelect) {
+          if (!contains) {
             var skipFocusser;
             if (!$select.skipFocusser) {
               //Will lose focus only with certain targets
