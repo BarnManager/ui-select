@@ -1,12 +1,12 @@
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
- * Version: 0.19.8 - 2018-12-14T13:35:26.551Z
+ * Version: 0.19.8 - 2020-04-30T06:51:23.943Z
  * License: MIT
  */
 
 
-(function () {
+(function () { 
 "use strict";
 var KEY = {
     TAB: 9,
@@ -665,6 +665,9 @@ uis.controller('uiSelectCtrl',
     return isDisabled;
   };
 
+  function _replaceTaggingLabelAndTrim(item, taggingLabel) {
+    return item.replace(taggingLabel, '').trim();
+  }
 
   // When the user selects an item with ENTER or clicks the dropdown
   ctrl.select = function(item, skipFocusser, $event) {
@@ -708,7 +711,7 @@ uis.controller('uiSelectCtrl',
               // if item type is 'string', apply the tagging label
               } else if ( typeof item === 'string' ) {
                 // trim the trailing space
-                item = item.replace(ctrl.taggingLabel,'').trim();
+                item = _replaceTaggingLabelAndTrim(item, ctrl.taggingLabel);
               }
             }
           }
@@ -717,6 +720,8 @@ uis.controller('uiSelectCtrl',
             ctrl.close(skipFocusser);
             return;
           }
+        } else if ( typeof item === 'string' ) {
+          item = _replaceTaggingLabelAndTrim(item, ctrl.taggingLabel);
         }
         _resetSearchInput();
         $scope.$broadcast('uis:select', item);
@@ -1617,7 +1622,7 @@ uis.directive('uiSelectMatch', ['uiSelectConfig', function(uiSelectConfig) {
       var theme = getAttribute(parent, 'theme') || uiSelectConfig.theme;
       var multi = angular.isDefined(getAttribute(parent, 'multiple'));
 
-      return theme + (multi ? '/match-multiple.tpl.html' : '/match.tpl.html');
+      return theme + (multi ? '/match-multiple.tpl.html' : '/match.tpl.html');      
     },
     link: function(scope, element, attrs, $select) {
       $select.lockChoiceExpression = attrs.uiLockChoice;
@@ -2116,7 +2121,7 @@ uis.directive('uiSelectNoChoice',
             templateUrl: function (tElement) {
                 // Needed so the uiSelect can detect the transcluded content
                 tElement.addClass('ui-select-no-choice');
-
+      
                 // Gets theme attribute from parent (ui-select)
                 var theme = tElement.parent().attr('theme') || uiSelectConfig.theme;
                 return theme + '/no-choice.tpl.html';
@@ -2508,12 +2513,12 @@ uis.service('uisRepeatParser', ['uiSelectMinErr','$parse', function(uiSelectMinE
       throw uiSelectMinErr('iexp', "Expected expression in form of '_item_ in _collection_[ track by _id_]' but got '{0}'.",
               expression);
     }
-
-    var source = match[5],
+    
+    var source = match[5], 
         filters = '';
 
     // When using (key,value) ui-select requires filters to be extracted, since the object
-    // is converted to an array for $select.items
+    // is converted to an array for $select.items 
     // (in which case the filters need to be reapplied)
     if (match[3]) {
       // Remove any enclosing parenthesis
@@ -2523,7 +2528,7 @@ uis.service('uisRepeatParser', ['uiSelectMinErr','$parse', function(uiSelectMinE
       if(filterMatch && filterMatch[1].trim()) {
         filters = filterMatch[1];
         source = source.replace(filters, '');
-      }
+      }      
     }
 
     return {
@@ -2539,7 +2544,7 @@ uis.service('uisRepeatParser', ['uiSelectMinErr','$parse', function(uiSelectMinE
           expression += ' track by ' + this.trackByExp;
         }
         return expression;
-      }
+      } 
     };
 
   };
